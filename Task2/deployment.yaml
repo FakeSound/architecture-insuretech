@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insuretech-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: insuretech-app
+  template:
+    metadata:
+      labels:
+        app: insuretech-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/yandex-practicum/scaletestapp:latest
+          imagePullPolicy: Never # Чтобы образ брался из хранилища minikube
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "20Mi"
+            limits:
+              memory: "30Mi"
